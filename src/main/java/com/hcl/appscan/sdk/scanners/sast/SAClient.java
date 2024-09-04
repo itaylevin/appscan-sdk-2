@@ -6,6 +6,7 @@
 
 package com.hcl.appscan.sdk.scanners.sast;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -82,7 +83,7 @@ public class SAClient implements SASTConstants {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 				String line;
 				try {
-					while((line = reader.readLine()) != null)
+					while((line = BoundedLineReader.readLine(reader, 5_000_000)) != null)
 						m_progress.setStatus(new Message(Message.INFO, line));
 				}
 				catch(IOException e) {
@@ -196,7 +197,7 @@ public class SAClient implements SASTConstants {
 		
 		try {
 			reader = new BufferedReader(new FileReader(versionInfo));
-			version = reader.readLine(); //The version is the first line of the version.info file.
+			version = BoundedLineReader.readLine(reader, 5_000_000); //The version is the first line of the version.info file.
 		} catch (IOException e) {
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_CHECKING_SACLIENT_VER, e.getLocalizedMessage())));
 		} finally {
