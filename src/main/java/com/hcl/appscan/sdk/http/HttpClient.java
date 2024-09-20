@@ -6,6 +6,8 @@
 
 package com.hcl.appscan.sdk.http;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -261,7 +263,7 @@ public class HttpClient {
 	
 	private HttpURLConnection makeConnection(String url, Method method,
 			Map<String, String> headerProperties) throws IOException {
-		URL requestURL = new URL(url);
+		URL requestURL = Urls.create(url, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 		HttpURLConnection conn = null;
 		conn = (HttpURLConnection) requestURL.openConnection();
 		conn.setRequestMethod(method.name());
