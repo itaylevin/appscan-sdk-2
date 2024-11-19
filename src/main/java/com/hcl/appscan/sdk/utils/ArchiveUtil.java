@@ -6,6 +6,7 @@
 
 package com.hcl.appscan.sdk.utils;
 
+import io.github.pixee.security.ZipSecurity;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -45,7 +46,7 @@ public class ArchiveUtil {
 	public static void unzip(File source, File destDir) throws IOException {
 		
 		FileInputStream input = new FileInputStream(source);
-		ZipInputStream zip = new ZipInputStream(new BufferedInputStream(input));
+		ZipInputStream zip = ZipSecurity.createHardenedInputStream(new BufferedInputStream(input));
 		destDir.mkdirs();
 		
 		ZipEntry entry = null;
